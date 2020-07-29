@@ -16,18 +16,14 @@ from django_drf_filepond.models import TemporaryUpload, StoredUpload
 LOG = logging.getLogger(__name__)
 
 
-# NOTE: CSRF IS DISABLED HERE TO SIMPLIFY THE TUTORIAL CODE WHICH DOESN'T
-#       USE DJANGO TEMPLATES AND USES ONLY A SINGLE DEMO WEBPAGE FOR THE
-#       WEB FRONTEND.
-#
-#       **** THIS APPROACH SHOULD NOT BE USED IN PRODUCTION! ****
-#
+def homeView(request):
+    return render(request, 'home.html', {})
 
-# @method_decorator(csrf_exempt, name='dispatch')
+
 class SubmitFormView(View):
 
-    def get(self,request):
-        return render(request, 'home.html', {})
+    # def get(self,request):
+    #     return render(request, 'home.html', {})
 
 
     # Handle POST request
@@ -65,7 +61,11 @@ class SubmitFormView(View):
     def delete(self, request):
         # Get the ID of the stored upload to be deleted and look it up in
         # the database.
+        print(request)
+        print(request.GET)
+
         upload_id = request.GET.get('id', None)
+        print(upload_id)
         try:
             su = StoredUpload.objects.get(upload_id=upload_id)
         except StoredUpload.DoesNotExist:

@@ -33,32 +33,9 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-
-<!--       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-          </li>
-        </ul>
-      </div> -->
     </nav>
 
     <main role="main" class="container">
-<!-- 		<div class="row">
-			<div class="col-md-2"></div>
-			<div class="col-md-8">
-				<h2>Filepond advanced demo page for<br/>django-drf-filepond</h2>
-				<p class="lead">This page provides a more advanced standalone 
-				demo web page for django-drf-filepond demonstrating the use of the
-				library's store_upload functionality combined with filepond's
-				load function.
-				</p>
-				<p>To operate correctly, this page requires that you put the 
-				provided example <code>views.py</code> file into your demonstration 
-				app, as detailed in the django-drf-filepond tutorial.</p>
-			</div>
-			<div class="col-md-2"></div>
-		</div> -->
 		<div class="row">
 			<div class="col-md-2"></div>
 			<div class="col-md-8">
@@ -111,9 +88,7 @@
             chunkSize: 50000,
 	    	server: {
 	    		url: 'http://127.0.0.1:8000/fp',
-
-	    		// process: '/process/',
-	    		
+	    		process: '/process/',
 	    		patch: '/patch/',
 	    		revert: '/revert/',
 	    		fetch: '/fetch/?target=',
@@ -146,6 +121,7 @@
 	    	$.ajax({
 	    		type: 'POST',
 	    		url: '/submitForm/',
+	    		csrfmiddlewaretoken: '{{ csrf_token }}',
 	    		data: $(this).serialize(),
 	    		success: function(response) {
 	    			if('status' in response && 'uploads' in response &&
@@ -186,6 +162,10 @@
 	    	$.ajax({
 	    		type: 'DELETE',
 	    		url: '/submitForm/?' + $.param({'id': delUploadId}),
+	    		beforeSend: function(xhr) {
+        			xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+    			},
+
 	    		success: function(response) {
 	    			if('status' in response && response.status == 'OK') {
 	    				$('table.uploads tr[data-upload="' + delUploadId + '"]').remove();
